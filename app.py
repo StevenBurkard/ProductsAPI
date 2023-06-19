@@ -23,8 +23,15 @@ CORS(app)
 Migrate(app, db)
 
 # Models
+class Product(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), nullable = False)
+    description = db.Column(db.String(255))
+    price = db.Column(db.Float(8, 2), nullable = False)
+    inventory_quantity = db.Column(db.Integer, nullable = False)
 
-
+    def __repr__(self):
+        return f'{self.name} {self.description} {self.price} {self.inventory_quantity}'
 
 # Schemas
 
