@@ -27,7 +27,7 @@ class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable = False)
     description = db.Column(db.String(255))
-    price = db.Column(db.Float(8, 2), nullable = False)
+    price = db.Column(db.Float(), nullable = False)
     inventory_quantity = db.Column(db.Integer, nullable = False)
 
     def __repr__(self):
@@ -42,7 +42,11 @@ product_schema = ProductSchema()
 products_schema = ProductSchema(many=True)
 
 # Resources
-
+class ProductListResource(Resource):
+    def get(self):
+        all_products = Product.query.all()
+        return products_schema.dump(all_products)
 
 
 # Routes
+api.add_resource(ProductListResource, '/api/products')
