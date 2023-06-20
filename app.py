@@ -30,6 +30,7 @@ class Product(db.Model):
     description = db.Column(db.String(255))
     price = db.Column(db.Float(), nullable = False)
     inventory_quantity = db.Column(db.Integer, nullable = False)
+    game_image = db.Column(db.String(2550), nullable = True)
 
     def __repr__(self):
         return f'{self.name} {self.description} {self.price} {self.inventory_quantity}'
@@ -41,9 +42,10 @@ class ProductSchema(ma.Schema):
     description = fields.String()
     price = fields.Float(required=True)
     inventory_quantity = fields.Integer(required=True)
+    game_image = fields.String(required=False)
 
     class Meta:
-        fields = ("id", "name", "description", "price", "inventory_quantity")
+        fields = ("id", "name", "description", "price", "inventory_quantity", "game_image")
     
     @post_load
     def create_product(self, data, **kwargs):
@@ -89,6 +91,8 @@ class ProductResource(Resource):
             product_from_db.price = request.json['price']
         if 'inventory_quantity' in request.json:
             product_from_db.inventory_quantity = request.json['inventory_quantity']
+        if 'game_image' in request.json:
+            product_from_db.game_image = request.json['game_image']
         db.session.commit()
         return product_schema.dump(product_from_db)
 
